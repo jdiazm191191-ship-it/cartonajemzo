@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cartonaje Modelo</title>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#004a98" />
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background: #f4f4f4;
+        padding: 20px;
+    }
+    h2 {
+        color: #004a98;
+        margin-bottom: 10px;
+    }
+    label {
+        font-weight: bold;
+        display: block;
+        margin-top: 10px;
+    }
+    select, input {
+        width: 100%;
+        padding: 12px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        margin-top: 5px;
+        font-size: 16px;
+    }
+    button {
+        width: 100%;
+        background: #d77a1e;
+        color: white;
+        padding: 14px;
+        border: none;
+        border-radius: 6px;
+        font-size: 18px;
+        margin-top: 20px;
+        font-weight: bold;
+    }
+    .card {
+        padding: 15px;
+        border-radius: 8px;
+        color: white;
+        font-size: 20px;
+        margin-top: 15px;
+        text-align: center;
+        font-weight: bold;
+    }
+    .azul { background: #004a98; }
+    .rojo { background: #c0392b; }
+    .amarillo { background: #d4a017; }
+    .cafe { background: #8b5a2b; }
+    .alerta {
+        background: white;
+        padding: 12px;
+        border-left: 6px solid orange;
+        margin-top: 15px;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+</style>
+
+</head>
+<body>
+
+<h2>Consultar Cartonaje</h2>
+
+<label>Selecciona un periodo</label>
+<select id="periodo">
+    <option value="ultima">Última semana</option>
+    <option value="penultima">Penúltima semana</option>
+    <option value="mes">Último mes</option>
+</select>
+
+<label>Ingresa tu ID SHARP</label>
+<input id="sharp" placeholder="32.135.152">
+
+<button onclick="consultar()">CONSULTAR CARTONAJE</button>
+
+<div id="resultados"></div>
+
+<script>
+// Registrar el service worker para convertir en PWA
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js");
+}
+
+function consultar() {
+    let sharp = document.getElementById("sharp").value;
+
+    if (!sharp) {
+        alert("Ingresa tu ID SHARP");
+        return;
+    }
+
+    // Datos simulados (cuando tengas API los conectamos)
+    let datos = {
+        vacaciones: 16,
+        faltas: 3,
+        cerveza: 11612,
+        mk: 13259
+    };
+
+    document.getElementById("resultados").innerHTML = `
+        <div class="card azul">VACACIONES<br>${datos.vacaciones}</div>
+        <div class="card rojo">FALTAS<br>${datos.faltas}</div>
+        <div class="card amarillo">CERVEZA<br>${datos.cerveza.toLocaleString()}</div>
+        <div class="card cafe">MK<br>${datos.mk.toLocaleString()}</div>
+
+        <div class="alerta">⬇ Tus cajas bajaron esta semana</div>
+        <div class="alerta">⚠ Revisa la ruta 43, disminuyó el movimiento</div>
+    `;
+}
+</script>
+
+</body>
+</html>
