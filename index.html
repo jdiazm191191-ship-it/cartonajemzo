@@ -1,120 +1,67 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Cartonaje Modelo</title>
-
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#004a98" />
+<meta charset="UTF-8">
+<title>Calculadora Cartonaje</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        background: #f4f4f4;
-        padding: 20px;
-    }
-    h2 {
-        color: #004a98;
-        margin-bottom: 10px;
-    }
-    label {
-        font-weight: bold;
-        display: block;
-        margin-top: 10px;
-    }
+    body { font-family: Arial; padding: 20px; background: #f2f2f2; }
+    h2 { color: #003A70; }
+    label { font-weight: bold; margin-top: 12px; display: block; }
     select, input {
-        width: 100%;
-        padding: 12px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        margin-top: 5px;
-        font-size: 16px;
+        width: 100%; padding: 10px; margin-top: 6px;
+        border-radius: 6px; border: 1px solid #aaa;
     }
     button {
-        width: 100%;
-        background: #d77a1e;
-        color: white;
-        padding: 14px;
-        border: none;
-        border-radius: 6px;
-        font-size: 18px;
-        margin-top: 20px;
-        font-weight: bold;
+        margin-top: 20px; width: 100%;
+        padding: 12px; background: #D9822B; color: white;
+        border: none; border-radius: 6px; font-size: 18px;
     }
-    .card {
-        padding: 15px;
-        border-radius: 8px;
-        color: white;
-        font-size: 20px;
-        margin-top: 15px;
-        text-align: center;
-        font-weight: bold;
-    }
-    .azul { background: #004a98; }
-    .rojo { background: #c0392b; }
-    .amarillo { background: #d4a017; }
-    .cafe { background: #8b5a2b; }
-    .alerta {
-        background: white;
-        padding: 12px;
-        border-left: 6px solid orange;
-        margin-top: 15px;
-        border-radius: 4px;
-        font-size: 16px;
+    .result {
+        margin-top: 25px; padding: 15px;
+        background: white; border-radius: 8px;
+        border-left: 6px solid #003A70;
     }
 </style>
-
 </head>
+
 <body>
 
-<h2>Consultar Cartonaje</h2>
+<h2>Calculadora de Producción</h2>
 
-<label>Selecciona un periodo</label>
+<label>Periodo</label>
 <select id="periodo">
-    <option value="ultima">Última semana</option>
-    <option value="penultima">Penúltima semana</option>
-    <option value="mes">Último mes</option>
+    <option value="dia">Día</option>
+    <option value="semana">Semana</option>
+    <option value="mes">Mes</option>
 </select>
 
-<label>Ingresa tu ID SHARP</label>
-<input id="sharp" placeholder="32.135.152">
+<label>Cajas por hora</label>
+<input type="number" id="cajas" value="120">
 
-<button onclick="consultar()">CONSULTAR CARTONAJE</button>
+<button onclick="calcular()">Calcular</button>
 
-<div id="resultados"></div>
+<div id="resultado" class="result" style="display:none;"></div>
 
 <script>
-// Registrar el service worker para convertir en PWA
-if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("sw.js");
-}
+function calcular() {
+    const periodo = document.getElementById("periodo").value;
+    const cajasHora = parseFloat(document.getElementById("cajas").value);
 
-function consultar() {
-    let sharp = document.getElementById("sharp").value;
+    let factor = 1;
 
-    if (!sharp) {
-        alert("Ingresa tu ID SHARP");
-        return;
-    }
+    if (periodo === "dia") factor = 8;
+    if (periodo === "semana") factor = 8 * 6;
+    if (periodo === "mes") factor = 8 * 26;
 
-    // Datos simulados (cuando tengas API los conectamos)
-    let datos = {
-        vacaciones: 16,
-        faltas: 3,
-        cerveza: 11612,
-        mk: 13259
-    };
+    const total = cajasHora * factor;
 
-    document.getElementById("resultados").innerHTML = `
-        <div class="card azul">VACACIONES<br>${datos.vacaciones}</div>
-        <div class="card rojo">FALTAS<br>${datos.faltas}</div>
-        <div class="card amarillo">CERVEZA<br>${datos.cerveza.toLocaleString()}</div>
-        <div class="card cafe">MK<br>${datos.mk.toLocaleString()}</div>
-
-        <div class="alerta">⬇ Tus cajas bajaron esta semana</div>
-        <div class="alerta">⚠ Revisa la ruta 43, disminuyó el movimiento</div>
+    document.getElementById("resultado").style.display = "block";
+    document.getElementById("resultado").innerHTML = `
+        <h3>Resultado</h3>
+        <p><strong>Periodo:</strong> ${periodo.toUpperCase()}</p>
+        <p><strong>Producción total:</strong> ${total} cajas</p>
     `;
 }
 </script>
